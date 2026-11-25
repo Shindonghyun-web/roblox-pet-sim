@@ -1,0 +1,33 @@
+# Roblox Studio가 만드는 임시/잠금 파일
+*.rbxl.lock
+*.rbxlx.lock
+*.rbxm.lock
+
+# Studio 게임 파일 (게임은 Roblox에 게시/저장하고, 저장소에는 코드만 올린다)
+*.rbxl
+*.rbxlx
+
+# Rojo 빌드 결과물
+/build/
+*.rbxm
+*.rbxmx
+
+# 도구가 내려받는 패키지
+/Packages/
+/ServerPackages/
+/DevPackages/
+
+# 개인 설정 (사람마다 다른 설정)
+.vscode/
+.idea/
+sourcemap.json
+*.local.json
+.claude/settings.local.json
+
+# 운영체제가 만드는 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 비밀 값 (API 키 등은 절대 올리지 않는다)
+.env
