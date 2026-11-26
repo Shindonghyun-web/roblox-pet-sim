@@ -17,6 +17,24 @@
         "$className": "Folder",
         "DataChanged": {
           "$className": "RemoteEvent"
+        },
+        "Notify": {
+          "$className": "RemoteEvent"
+        },
+        "BuyEgg": {
+          "$className": "RemoteFunction"
+        },
+        "EquipPet": {
+          "$className": "RemoteFunction"
+        },
+        "UnequipPet": {
+          "$className": "RemoteFunction"
+        },
+        "DeletePet": {
+          "$className": "RemoteFunction"
+        },
+        "ClaimDaily": {
+          "$className": "RemoteFunction"
         }
       }
     },

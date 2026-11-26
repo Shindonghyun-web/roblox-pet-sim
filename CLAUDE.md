@@ -40,14 +40,17 @@ StarterPlayer/StarterPlayerScripts/
     ○○Controller        (ModuleScript)  입력 처리, 화면 갱신, 연출 (예: HUDController)
 
 StarterGui/
-  ○○Gui                 (ScreenGui)     화면 디자인만. 로직은 Controller에서 처리
+  (비워 둔다. 화면(ScreenGui)은 각 Controller가 실행될 때 코드로 만든다)
 
 ServerStorage/
   (서버만 보는 모델, 템플릿)
 
 Workspace/
-  (맵. 스크립트는 되도록 두지 않는다)
+  (Studio에서 직접 넣지 않는다. 맵은 MapService가, 보물/알/벽은 각 Service가 코드로 만든다)
 ```
+
+- **화면과 맵도 코드로 만든다.** (2026-11-25 개발자 결정) Studio에서 직접 디자인할 필요가 없게 하기 위해서다.
+  화면 모양을 바꾸려면 그 화면을 만드는 Controller의 `buildGui` 함수를, 맵을 바꾸려면 `MapService`와 `Config`를 고친다.
 
 - `02_PRD.md`의 기술 설계 표에서 `○○Service (Script)`라고 적힌 것은 위 구조대로 **`Services` 폴더 안의 ModuleScript**로 만듭니다.
 - Script와 LocalScript는 `ServerMain`, `ClientMain` 두 개만 두는 것을 기본으로 합니다. 나머지는 모두 ModuleScript입니다.
@@ -179,6 +182,11 @@ return Config
 5. **오류를 고칠 때는 원인부터 설명합니다.** 개발자가 붙여준 Output 창 오류 메시지를 보고, 어느 파일 몇 번째 줄에서 왜 났는지 설명한 뒤 고칩니다. 추측이면 추측이라고 말합니다.
 6. **작업 후에는 변경 요약을 줍니다.** 무엇을 바꿨는지, 개발자가 Studio에서 무엇을 확인하면 되는지(아래 11장).
 7. `02_PRD.md`의 "범위 밖" 목록에 있는 기능은 요청이 없으면 만들지 않습니다.
+8. **"전부 해줘" 모드** (2026-11-25 개발자 결정): 개발자가 여러 기능을 한꺼번에 맡기면, 단계마다 멈춰 허락받지 않고 끝까지 이어서 만듭니다.
+   - 1번의 "다른 파일을 고치기 전에 허락받기"는 이때 생략하고, 대신 작업 끝 요약에 고친 파일을 모두 적습니다.
+   - 기존 플레이어 데이터가 사라지는 변경, 이름 바꾸기, 범위 밖 기능은 이 모드에서도 먼저 물어봅니다.
+9. **기능 위치 기록**: 기능을 하나 만들거나 바꿀 때마다 `05_기능위치.md`에 "그 기능이 어느 파일, 어느 함수, 어느 Config 값에 있는지"를 바로 적습니다.
+   나중에 "그거 어디 있어?", "그것만 고쳐줘"라고 할 때 이 파일을 먼저 봅니다.
 
 ## 11. 변경마다 확인할 체크리스트
 
@@ -209,7 +217,7 @@ AI가 코드를 줄 때 스스로 점검할 것:
   - Config의 주요 값(가격, 확률) 변경
   - 데이터 저장 모양 변경
   - 빌드 순서 단계 완료 (체크 표시)
-- 빌드 순서의 한 단계가 끝나기 전에는 다음 단계 기능을 미리 만들지 않습니다.
+- 빌드 순서는 한 단계씩 하는 것이 기본이지만, 개발자가 "전부 해줘"라고 하면 10장 8번에 따라 이어서 만듭니다.
 - 작업을 시작할 때 `03_진행기록.md`를 읽고, 작업이 끝나면 그 파일에 적을 내용(한 일, 다음 할 일, 알려진 버그)을 제안합니다.
 - 기능을 추가하면 `04_테스트체크리스트.md`에서 개발자가 확인할 항목을 골라 11장의 확인 방법에 함께 알려줍니다.
 
@@ -235,5 +243,6 @@ AI가 코드를 줄 때 스스로 점검할 것:
   - 예: `src/server/ServerMain.server.luau`, `src/server/Services/DataService.luau`, `src/client/ClientMain.client.luau`, `src/shared/Config.luau`
 - 코드 파일을 줄 때는 Studio 위치 대신 **`src` 안의 파일 경로**를 알려줍니다.
 - Remote는 `default.project.json`의 `Remotes` 안에 한 줄씩 추가합니다. (`"BuyItem": { "$className": "RemoteFunction" }`) PRD 통신 표와 같게 맞춥니다.
-- 맵, 모델, GUI 디자인은 Rojo로 관리하지 않고 Studio에서 직접 만듭니다. `src`에 연결된 위치(ServerScriptService 등)에 Studio에서 직접 넣은 것은 동기화 때 지워질 수 있으니, 그 위치에는 Studio에서 스크립트를 만들지 않도록 안내합니다.
+- 맵과 GUI도 코드(`src`)로 만듭니다. (2장 참고) `src`에 연결된 위치(ServerScriptService 등)에 Studio에서 직접 넣은 것은 동기화 때 지워질 수 있으니, 그 위치에는 Studio에서 스크립트를 만들지 않도록 안내합니다.
+- Studio 메뉴 이름은 한글로 안내합니다. (개발자의 Studio가 한글 설정)
 - `default.project.json`의 구조를 바꾸는 것은 개발자에게 먼저 확인받습니다.
